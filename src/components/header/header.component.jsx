@@ -1,11 +1,21 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'; //lets us modify our component to access redux-related data
+import {createStructuredSelector} from 'reselect';
+
+
+
 import {auth} from '../../firebase/firebase.utils';
+
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import {selectCartHidden} from '../../redux/cart/cart.selectors';
+import {selectCurrentUser} from '../../redux/user/user.selector';
+
 
 import './header.styles.scss';
 
-const Header = ({currentUser}) => (
+const Header = ({currentUser, hidden}) => (
     <div className='header'>
         <Link className='logo-container' to="/">
              <img src='../header.png' alt='logo' className='logo' />
@@ -23,12 +33,18 @@ const Header = ({currentUser}) => (
                 :
                 <Link className='option' to='/signIn'>SIGN IN</Link>
             }
+            <CartIcon />
         </div>
+        {
+            hidden ? null :
+            <CartDropdown />
+        }        
     </div>
 )
 
-const mapStateToProps = state => ({ //state = root reducer
-    currentUser: state.user.currentUser
+const mapStateToProps = createStructuredSelector({ //state = root reducer
+    currentUser: selectCurrentUser,
+    hidden: selectCartHidden
 })
 
 export default connect(mapStateToProps)(Header);
