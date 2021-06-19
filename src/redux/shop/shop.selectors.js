@@ -10,11 +10,11 @@ export const selectCollections = createSelector(
 
 export const selectCollectionForPreview = createSelector(
     [selectCollections],
-    collections => Object.keys(collections).map(key => collections[key]) //convert object to array and map over keys to get the value at that key
+    collections => collections ? Object.keys(collections).map(key => collections[key]) : [] //convert object to array and map over keys to get the value at that key
 )
 
 export const selectCollection = memoize(collectionUrlParam => 
 createSelector(
     [selectCollections],
-    collections => collections[collectionUrlParam]
+    collections => collections? collections[collectionUrlParam]:null
 ));
